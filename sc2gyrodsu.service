@@ -1,12 +1,13 @@
 [Unit]
 Description=Steam Controller Gyro DSU Server
+Documentation=https://github.com/TyanColte/Steam-Controller-GyroDSU
 After=sockets.target
 StartLimitIntervalSec=0
 
 [Service]
 Type=simple
 Restart=always
-RestartSec=1
+RestartSec=2
 ExecStart=%h/SteamControllerGyroDSU/SteamControllerGyroDSU --port 26761
 
 [Install]

@@ -1,6 +1,6 @@
 [Desktop Entry]
-Exec=bash <(curl -sL https://raw.githubusercontent.com/dylangmarinus-stack/Steam-Controller-GyroDSU/main/pkg/install.sh)
-Icon=input-gamepad
+Exec=bash -c "curl -fsSL https://raw.githubusercontent.com/TyanColte/Steam-Controller-GyroDSU/main/pkg/install.sh -o /tmp/sc2gyrodsu-install.sh && bash /tmp/sc2gyrodsu-install.sh; rm -f /tmp/sc2gyrodsu-install.sh"
+Icon=sc2gyrodsu
 Name=SteamControllerGyroDSU
 StartupNotify=false
 Terminal=true

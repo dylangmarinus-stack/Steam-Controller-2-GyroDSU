@@ -1,0 +1,25 @@
+# sc2gyrodsu — HID access rules for Steam Controller 2
+#
+# These rules are only needed on systems that do NOT have Steam installed.
+# Steam ships /lib/udev/rules.d/71-valve-controllers.rules which already
+# grants access to all Valve (VID 28de) HID devices.
+#
+# TAG+="uaccess" grants access to the currently logged-in user via
+# logind ACLs (no group membership required, modern systems preferred).
+# GROUP="input" MODE="0660" is the fallback for older systems.
+
+# SC2 Triton — USB-C wired
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="28de", ATTRS{idProduct}=="1302", \
+    TAG+="uaccess", GROUP="input", MODE="0660"
+
+# SC2 Triton — Bluetooth LE
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="28de", ATTRS{idProduct}=="1303", \
+    TAG+="uaccess", GROUP="input", MODE="0660"
+
+# Proteus Puck dongle
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="28de", ATTRS{idProduct}=="1304", \
+    TAG+="uaccess", GROUP="input", MODE="0660"
+
+# Nereid Puck dongle
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="28de", ATTRS{idProduct}=="1305", \
+    TAG+="uaccess", GROUP="input", MODE="0660"

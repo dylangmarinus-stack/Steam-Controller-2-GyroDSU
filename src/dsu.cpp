@@ -229,7 +229,7 @@ void DsuServer::setDisconnected(int slot) {
 void DsuServer::pushState(const ControllerState& state) {
     { std::lock_guard<std::mutex> lk(stateMutex_);
       int s=state.slot; if(s>=0&&s<4) slotConnected_[s]=true; }
-    samplesInWindow_++;
+    samplesInWindow_.fetch_add(1, std::memory_order_relaxed);
     broadcastData(state);
 }
 
@@ -239,15 +239,17 @@ void DsuServer::serverLoop() {
         struct sockaddr_in src{};
         socklen_t sl=sizeof(src);
         int n=recvfrom(sock_,buf,sizeof(buf),0,(struct sockaddr*)&src,&sl);
-        if (n > 0) { requestsInWindow_++; handleMessage(buf,n,src); }
+        if (n > 0) { requestsInWindow_.fetch_add(1, std::memory_order_relaxed); handleMessage(buf,n,src); }
         cleanupSubscribers();
         auto now=std::chrono::steady_clock::now();
         if (now-windowStart_>=STAT_INTERVAL) {
             float secs=std::chrono::duration<float>(now-windowStart_).count();
             size_t ns; { std::lock_guard<std::mutex> lk(subMutex_); ns=subscribers_.size(); }
+            uint32_t smpl = samplesInWindow_.exchange(0, std::memory_order_relaxed);
+            uint32_t pkts = packetsInWindow_.exchange(0, std::memory_order_relaxed);
+            uint32_t reqs = requestsInWindow_.exchange(0, std::memory_order_relaxed);
             fprintf(stderr,"dsu: %zu sub(s) | %.1f samples/s | %.1f packets/s | %.1f reqs/s\n",
-                ns,samplesInWindow_/secs,packetsInWindow_/secs,requestsInWindow_/secs);
-            samplesInWindow_=packetsInWindow_=requestsInWindow_=0;
+                ns, smpl/secs, pkts/secs, reqs/secs);
             windowStart_=now;
         }
     }
@@ -333,7 +335,7 @@ void DsuServer::broadcastData(const ControllerState& state) {
         w32(out + PCNT_OFF, sub.packetCounters[slot]);
         finCrc(out, sizeof(out));
         sendto(sock_, out, sizeof(out), 0, (struct sockaddr*)&sub.addr, sizeof(sub.addr));
-        packetsInWindow_++;
+        packetsInWindow_.fetch_add(1, std::memory_order_relaxed);
     }
 }
 

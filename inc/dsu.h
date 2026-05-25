@@ -51,12 +51,13 @@ private:
     std::mutex stateMutex_;
     bool slotConnected_[4] = {};
 
-    std::atomic<bool> running_{false};
-    std::thread thread_;
+    std::atomic<bool>     running_{false};
+    std::thread           thread_;
 
-    uint32_t samplesInWindow_  = 0;
-    uint32_t packetsInWindow_  = 0;
-    uint32_t requestsInWindow_ = 0;
+    // Accessed from multiple threads — use atomics to avoid data races.
+    std::atomic<uint32_t> samplesInWindow_{0};
+    std::atomic<uint32_t> packetsInWindow_{0};
+    std::atomic<uint32_t> requestsInWindow_{0};
     std::chrono::steady_clock::time_point windowStart_;
 };
 

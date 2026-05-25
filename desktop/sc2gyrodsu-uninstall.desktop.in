@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.1
+Type=Application
+Name=Uninstall SteamControllerGyroDSU
+GenericName=Gyro DSU Uninstaller
+Comment=Remove SteamControllerGyroDSU and its service
+Exec=@INSTALL_DIR@/uninstall.sh
+Icon=edit-delete
+Terminal=true
+Categories=Game;System;
+Keywords=steam;controller;gyro;dsu;uninstall;remove;
+StartupNotify=false

@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.1
+Type=Application
+Name=SteamControllerGyroDSU Config
+GenericName=Gyro DSU Configuration
+Comment=Configure axis mapping and calibrate gyro for Steam Controller 2
+Exec=@INSTALL_DIR@/sc2gyrodsu-config
+Icon=sc2gyrodsu
+Terminal=false
+Categories=Game;Settings;
+Keywords=steam;controller;gyro;dsu;cemuhook;gamepad;
+StartupNotify=true
