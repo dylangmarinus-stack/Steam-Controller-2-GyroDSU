@@ -101,7 +101,7 @@ static void finCrc(uint8_t* out, size_t len) {
 static void writeCtrlHdr(uint8_t* buf, uint8_t slot, bool conn) {
     buf[0] = slot;
     if (conn && slot < MAX_SLOTS) {
-        buf[1] = 1; buf[2] = 2; buf[3] = 1;
+        buf[1] = 2; buf[2] = 2; buf[3] = 1;
         memcpy(buf+4, SLOT_MACS[slot], 6);
         buf[10] = 0;
     } else {
